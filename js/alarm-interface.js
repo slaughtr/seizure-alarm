@@ -1,10 +1,13 @@
 var funTime = require('./../js/alarm.js').funTime
 let hour = null
 let minute = null
+let time = null
 let nyanCat = new Audio('./../resources/nyan.mp3')
 
 $(function() {
   $('.blinks').hide()
+  $('*').removeClass('blinks')
+  
   $('.area').hide()
   $('#snoozer').hide()
 
@@ -14,7 +17,7 @@ $(function() {
   setInterval(alarmTimer, 1000)
 
   function alarmTimer() {
-    var currentHour = parseInt(moment().format('H'))
+    var currentHour = parseInt(moment().format('HH'))
     var currentMinute = parseInt(moment().format('mm'))
     if ((hour === currentHour) && (minute === currentMinute)) {
       $('*').addClass('blinks')
@@ -27,17 +30,18 @@ $(function() {
 
   $('#snoozer').click(function() {
     minute += 1
-    debugger
     $('*').removeClass('blinks')
     $('*').css('backgroundColor','white')
-    $('.area').slideUp()
+    $('.area').slideUp(2000)
+    $('#nextAlarm').text('Next alarm at: '+hour+':'+minute)
     nyanCat.pause()
   })
 
   $('.alarm-form').submit(function(event) {
     event.preventDefault()
-    hour = parseInt($('#hour').val())
-    minute = parseInt($('#minute').val())
-    $('#nextAlarm').text('Next alarm at: '+hour+':'+minute)
+    alarmTime = $('#alarmTime').val()
+    hour = parseInt(alarmTime.substring(0,2))
+    minute = parseInt(alarmTime.substring(3,5))
+    $('#nextAlarm').text('Next alarm at: '+alarmTime)
   })
 })
